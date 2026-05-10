@@ -1,0 +1,4 @@
+# Ignore local dev files
+.localdevserver
+.sf
+.sfdx
