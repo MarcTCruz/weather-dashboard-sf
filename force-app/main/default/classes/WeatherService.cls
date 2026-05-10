@@ -39,7 +39,7 @@ public with sharing class WeatherService {
         ];
         if (records.isEmpty()) {
             throw new WeatherServiceException(
-                'WeatherAPIConfig__mdt record "Default" not found. Deploy the Custom Metadata before using this service.'
+                'Registro "Default" do WeatherAPIConfig__mdt não encontrado. Faça o deploy do Custom Metadata antes de usar este serviço.'
             );
         }
         return records[0];
@@ -57,7 +57,7 @@ public with sharing class WeatherService {
     @AuraEnabled
     public static WeatherDTO.GeocodingResult geocodeCity(String cityName) {
         if (String.isBlank(cityName)) {
-            throw new WeatherServiceException('City name cannot be blank.');
+            throw new WeatherServiceException('O nome da cidade não pode estar vazio.');
         }
 
         WeatherAPIConfig__mdt cfg = getConfig();
@@ -73,11 +73,11 @@ public with sharing class WeatherService {
                 res.getBody(), WeatherDTO.GeocodingResponse.class
             );
         } catch (Exception e) {
-            throw new WeatherServiceException('Failed to parse geocoding response: ' + e.getMessage());
+            throw new WeatherServiceException('Falha ao processar resposta de geocoding: ' + e.getMessage());
         }
 
         if (parsed == null || parsed.results == null || parsed.results.isEmpty()) {
-            throw new WeatherServiceException('City not found: "' + cityName + '". Try a different spelling or a nearby city.');
+            throw new WeatherServiceException('Cidade não encontrada: "' + cityName + '". Tente uma grafia diferente ou uma cidade próxima.');
         }
 
         return parsed.results[0];
@@ -119,7 +119,7 @@ public with sharing class WeatherService {
                 body, WeatherDTO.ForecastResponse.class
             );
         } catch (Exception e) {
-            throw new WeatherServiceException('Failed to parse forecast response: ' + e.getMessage());
+            throw new WeatherServiceException('Falha ao processar resposta de previsão: ' + e.getMessage());
         }
     }
 
@@ -133,12 +133,12 @@ public with sharing class WeatherService {
         try {
             res = new Http().send(req);
         } catch (CalloutException e) {
-            throw new WeatherServiceException('Callout failed: ' + e.getMessage());
+            throw new WeatherServiceException('Falha na chamada externa: ' + e.getMessage());
         }
 
         if (res.getStatusCode() < 200 || res.getStatusCode() >= 300) {
             throw new WeatherServiceException(
-                'API error — HTTP ' + res.getStatusCode() + ' ' + res.getStatus()
+                'Erro na API — HTTP ' + res.getStatusCode() + ' ' + res.getStatus()
             );
         }
         return res;
@@ -177,23 +177,23 @@ public with sharing class WeatherService {
      */
     @testVisible
     private static String getWMODescription(Integer code) {
-        if (code == null)                       return 'Unknown';
-        if (code == 0)                          return 'Clear Sky';
-        if (code == 1)                          return 'Mainly Clear';
-        if (code == 2)                          return 'Partly Cloudy';
-        if (code == 3)                          return 'Overcast';
-        if (code == 45 || code == 48)           return 'Foggy';
-        if (code >= 51 && code <= 55)           return 'Drizzle';
-        if (code == 56 || code == 57)           return 'Freezing Drizzle';
-        if (code >= 61 && code <= 65)           return 'Rain';
-        if (code == 66 || code == 67)           return 'Freezing Rain';
-        if (code >= 71 && code <= 75)           return 'Snowfall';
-        if (code == 77)                         return 'Snow Grains';
-        if (code >= 80 && code <= 82)           return 'Rain Showers';
-        if (code == 85 || code == 86)           return 'Snow Showers';
-        if (code == 95)                         return 'Thunderstorm';
-        if (code == 96 || code == 99)           return 'Thunderstorm with Hail';
-        return 'Unknown';
+        if (code == null)                       return 'Desconhecido';
+        if (code == 0)                          return 'Céu Limpo';
+        if (code == 1)                          return 'Predominantemente Limpo';
+        if (code == 2)                          return 'Parcialmente Nublado';
+        if (code == 3)                          return 'Encoberto';
+        if (code == 45 || code == 48)           return 'Neblina';
+        if (code >= 51 && code <= 55)           return 'Garoa';
+        if (code == 56 || code == 57)           return 'Garoa Congelante';
+        if (code >= 61 && code <= 65)           return 'Chuva';
+        if (code == 66 || code == 67)           return 'Chuva Congelante';
+        if (code >= 71 && code <= 75)           return 'Neve';
+        if (code == 77)                         return 'Grãos de Neve';
+        if (code >= 80 && code <= 82)           return 'Pancadas de Chuva';
+        if (code == 85 || code == 86)           return 'Pancadas de Neve';
+        if (code == 95)                         return 'Tempestade';
+        if (code == 96 || code == 99)           return 'Tempestade com Granizo';
+        return 'Desconhecido';
     }
 
     /**

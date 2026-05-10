@@ -99,7 +99,7 @@ private class WeatherServiceTest {
             WeatherService.geocodeCity('   ');
             System.assert(false, 'Expected WeatherServiceException for blank input');
         } catch (WeatherService.WeatherServiceException e) {
-            System.assert(e.getMessage().contains('blank'), 'Message should mention blank: ' + e.getMessage());
+            System.assert(e.getMessage().contains('vazio'), 'Message should mention empty: ' + e.getMessage());
         }
         Test.stopTest();
     }
@@ -114,7 +114,7 @@ private class WeatherServiceTest {
             WeatherService.geocodeCity('XyzNonExistentCity999');
             System.assert(false, 'Expected WeatherServiceException for unknown city');
         } catch (WeatherService.WeatherServiceException e) {
-            System.assert(e.getMessage().contains('not found'), 'Message should mention not found: ' + e.getMessage());
+            System.assert(e.getMessage().contains('não encontrada'), 'Message should mention not found: ' + e.getMessage());
         }
         Test.stopTest();
     }
@@ -144,7 +144,7 @@ private class WeatherServiceTest {
             WeatherService.geocodeCity('London');
             System.assert(false, 'Expected WeatherServiceException for callout error');
         } catch (WeatherService.WeatherServiceException e) {
-            System.assert(e.getMessage().contains('Callout failed'), 'Message should mention callout failure: ' + e.getMessage());
+            System.assert(e.getMessage().contains('chamada externa'), 'Message should mention callout failure: ' + e.getMessage());
         }
         Test.stopTest();
     }
@@ -159,7 +159,7 @@ private class WeatherServiceTest {
             WeatherService.geocodeCity('London');
             System.assert(false, 'Expected WeatherServiceException for invalid JSON');
         } catch (WeatherService.WeatherServiceException e) {
-            System.assert(e.getMessage().contains('parse'), 'Message should mention parse: ' + e.getMessage());
+            System.assert(e.getMessage().contains('processar'), 'Message should mention processar: ' + e.getMessage());
         }
         Test.stopTest();
     }
@@ -191,7 +191,7 @@ private class WeatherServiceTest {
         System.assertEquals('km/h',           r.windSpeedUnit,     'Wind unit');
         System.assertEquals(0.0,              r.precipitation,     'Precipitation');
         System.assertEquals(2,                r.weatherCode,       'Weather code');
-        System.assertEquals('Partly Cloudy',  r.weatherDescription,'Description');
+        System.assertEquals('Parcialmente Nublado', r.weatherDescription, 'Description');
         System.assertEquals('🌤️',            r.weatherIcon,       'Icon');
         System.assertNotEquals(null,           r.observationTime,   'Observation time');
     }
@@ -229,7 +229,7 @@ private class WeatherServiceTest {
             WeatherService.getWeatherByCity('London');
             System.assert(false, 'Expected WeatherServiceException for bad forecast JSON');
         } catch (WeatherService.WeatherServiceException e) {
-            System.assert(e.getMessage().contains('parse'), 'Message should mention parse: ' + e.getMessage());
+            System.assert(e.getMessage().contains('processar'), 'Message should mention processar: ' + e.getMessage());
         }
         Test.stopTest();
     }
@@ -238,29 +238,29 @@ private class WeatherServiceTest {
 
     @isTest
     static void testGetWMODescription_allBranches() {
-        System.assertEquals('Clear Sky',               WeatherService.getWMODescription(0));
-        System.assertEquals('Mainly Clear',            WeatherService.getWMODescription(1));
-        System.assertEquals('Partly Cloudy',           WeatherService.getWMODescription(2));
-        System.assertEquals('Overcast',                WeatherService.getWMODescription(3));
-        System.assertEquals('Foggy',                   WeatherService.getWMODescription(45));
-        System.assertEquals('Foggy',                   WeatherService.getWMODescription(48));
-        System.assertEquals('Drizzle',                 WeatherService.getWMODescription(51));
-        System.assertEquals('Drizzle',                 WeatherService.getWMODescription(55));
-        System.assertEquals('Freezing Drizzle',        WeatherService.getWMODescription(56));
-        System.assertEquals('Freezing Drizzle',        WeatherService.getWMODescription(57));
-        System.assertEquals('Rain',                    WeatherService.getWMODescription(61));
-        System.assertEquals('Rain',                    WeatherService.getWMODescription(65));
-        System.assertEquals('Freezing Rain',           WeatherService.getWMODescription(66));
-        System.assertEquals('Snowfall',                WeatherService.getWMODescription(71));
-        System.assertEquals('Snow Grains',             WeatherService.getWMODescription(77));
-        System.assertEquals('Rain Showers',            WeatherService.getWMODescription(80));
-        System.assertEquals('Rain Showers',            WeatherService.getWMODescription(82));
-        System.assertEquals('Snow Showers',            WeatherService.getWMODescription(85));
-        System.assertEquals('Thunderstorm',            WeatherService.getWMODescription(95));
-        System.assertEquals('Thunderstorm with Hail',  WeatherService.getWMODescription(96));
-        System.assertEquals('Thunderstorm with Hail',  WeatherService.getWMODescription(99));
-        System.assertEquals('Unknown',                 WeatherService.getWMODescription(null));
-        System.assertEquals('Unknown',                 WeatherService.getWMODescription(999));
+        System.assertEquals('Céu Limpo',                  WeatherService.getWMODescription(0));
+        System.assertEquals('Predominantemente Limpo',    WeatherService.getWMODescription(1));
+        System.assertEquals('Parcialmente Nublado',       WeatherService.getWMODescription(2));
+        System.assertEquals('Encoberto',                  WeatherService.getWMODescription(3));
+        System.assertEquals('Neblina',                    WeatherService.getWMODescription(45));
+        System.assertEquals('Neblina',                    WeatherService.getWMODescription(48));
+        System.assertEquals('Garoa',                      WeatherService.getWMODescription(51));
+        System.assertEquals('Garoa',                      WeatherService.getWMODescription(55));
+        System.assertEquals('Garoa Congelante',           WeatherService.getWMODescription(56));
+        System.assertEquals('Garoa Congelante',           WeatherService.getWMODescription(57));
+        System.assertEquals('Chuva',                      WeatherService.getWMODescription(61));
+        System.assertEquals('Chuva',                      WeatherService.getWMODescription(65));
+        System.assertEquals('Chuva Congelante',           WeatherService.getWMODescription(66));
+        System.assertEquals('Neve',                       WeatherService.getWMODescription(71));
+        System.assertEquals('Grãos de Neve',              WeatherService.getWMODescription(77));
+        System.assertEquals('Pancadas de Chuva',          WeatherService.getWMODescription(80));
+        System.assertEquals('Pancadas de Chuva',          WeatherService.getWMODescription(82));
+        System.assertEquals('Pancadas de Neve',           WeatherService.getWMODescription(85));
+        System.assertEquals('Tempestade',                 WeatherService.getWMODescription(95));
+        System.assertEquals('Tempestade com Granizo',     WeatherService.getWMODescription(96));
+        System.assertEquals('Tempestade com Granizo',     WeatherService.getWMODescription(99));
+        System.assertEquals('Desconhecido',               WeatherService.getWMODescription(null));
+        System.assertEquals('Desconhecido',               WeatherService.getWMODescription(999));
     }
 
     @isTest
