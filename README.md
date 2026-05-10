@@ -57,7 +57,7 @@ WeatherService.getWeatherByCity(cityName)
 ### 1. Clone o repositório e autentique na org
 
 ```bash
-git clone <url-do-repositorio>
+git clone https://github.com/MarcTCruz/weather-dashboard-sf.git
 cd WeatherChallenge
 
 # Autentique e defina o alias da org destino
