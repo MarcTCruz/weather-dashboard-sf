@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomTab xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Consulta de dados meteorológicos em tempo real via Open-Meteo API.</description>
+    <label>Painel Climático</label>
+    <lwcComponent>weatherDashboard</lwcComponent>
+    <motif>Custom78: Map</motif>
+</CustomTab>
