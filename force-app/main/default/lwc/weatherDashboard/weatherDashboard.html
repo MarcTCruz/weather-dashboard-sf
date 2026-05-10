@@ -1,0 +1,139 @@
+<template>
+  <lightning-card title="Weather Dashboard" icon-name="utility:daylight">
+
+    <!-- ── Search Bar ─────────────────────────────────────────────────────── -->
+    <div class="slds-p-horizontal_medium slds-p-top_medium">
+      <div class="slds-grid slds-gutters slds-grid_vertical-align-end">
+        <div class="slds-col slds-grow">
+          <lightning-input
+            type="search"
+            label="City"
+            placeholder="e.g. São Paulo, London, Tokyo..."
+            value={cityName}
+            onchange={handleCityChange}
+            onkeyup={handleKeyUp}
+            disabled={isLoading}>
+          </lightning-input>
+        </div>
+        <div class="slds-col slds-no-flex">
+          <lightning-button
+            label="Search"
+            variant="brand"
+            icon-name="utility:search"
+            onclick={handleSearch}
+            disabled={isSearchDisabled}>
+          </lightning-button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Loading Spinner ────────────────────────────────────────────────── -->
+    <template if:true={isLoading}>
+      <div class="slds-p-around_large slds-text-align_center">
+        <lightning-spinner
+          alternative-text="Fetching weather data..."
+          size="medium">
+        </lightning-spinner>
+        <p class="slds-text-body_small slds-text-color_weak slds-m-top_medium">
+          Fetching weather data...
+        </p>
+      </div>
+    </template>
+
+    <!-- ── Error Banner ───────────────────────────────────────────────────── -->
+    <template if:true={hasError}>
+      <div class="slds-p-around_medium">
+        <div class="slds-scoped-notification slds-media slds-media_center slds-theme_error" role="alert">
+          <div class="slds-media__figure slds-media__figure_fixed-width">
+            <lightning-icon icon-name="utility:error" size="small" variant="inverse"></lightning-icon>
+          </div>
+          <div class="slds-media__body">
+            <p><strong>Oops!</strong> {errorMessage}</p>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <!-- ── Weather Results ────────────────────────────────────────────────── -->
+    <template if:true={weatherData}>
+      <div class="slds-p-around_medium">
+
+        <!-- City Header -->
+        <div class="city-header slds-text-align_center slds-m-bottom_large">
+          <p class="weather-icon-main">{weatherData.weatherIcon}</p>
+          <h1 class="slds-text-heading_large city-name">
+            {weatherData.cityName},&nbsp;{weatherData.countryCode}
+          </h1>
+          <p class="slds-text-body_small slds-text-color_weak">
+            {weatherData.timezone} &bull; {formattedTime}
+          </p>
+          <p class="slds-text-heading_medium condition-label slds-m-top_x-small">
+            {weatherData.weatherDescription}
+          </p>
+        </div>
+
+        <!-- Metric Cards -->
+        <div class="slds-grid slds-gutters slds-wrap slds-grid_align-center">
+
+          <!-- Temperature -->
+          <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-3 slds-large-size_1-of-5 slds-m-bottom_small">
+            <div class="metric-card slds-box slds-box_x-small slds-text-align_center">
+              <p class="metric-icon">🌡️</p>
+              <p class="metric-label">Temperature</p>
+              <p class="metric-value temp-value">{weatherData.temperature}{weatherData.temperatureUnit}</p>
+            </div>
+          </div>
+
+          <!-- Feels Like -->
+          <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-3 slds-large-size_1-of-5 slds-m-bottom_small">
+            <div class="metric-card slds-box slds-box_x-small slds-text-align_center">
+              <p class="metric-icon">🤔</p>
+              <p class="metric-label">Feels Like</p>
+              <p class="metric-value">{weatherData.feelsLike}{weatherData.temperatureUnit}</p>
+            </div>
+          </div>
+
+          <!-- Humidity -->
+          <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-3 slds-large-size_1-of-5 slds-m-bottom_small">
+            <div class="metric-card slds-box slds-box_x-small slds-text-align_center">
+              <p class="metric-icon">💧</p>
+              <p class="metric-label">Humidity</p>
+              <p class="metric-value">{weatherData.humidity}{weatherData.humidityUnit}</p>
+            </div>
+          </div>
+
+          <!-- Wind Speed -->
+          <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-3 slds-large-size_1-of-5 slds-m-bottom_small">
+            <div class="metric-card slds-box slds-box_x-small slds-text-align_center">
+              <p class="metric-icon">💨</p>
+              <p class="metric-label">Wind</p>
+              <p class="metric-value">{weatherData.windSpeed} {weatherData.windSpeedUnit}</p>
+            </div>
+          </div>
+
+          <!-- Precipitation -->
+          <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-3 slds-large-size_1-of-5 slds-m-bottom_small">
+            <div class="metric-card slds-box slds-box_x-small slds-text-align_center">
+              <p class="metric-icon">🌧️</p>
+              <p class="metric-label">Precipitation</p>
+              <p class="metric-value">{weatherData.precipitation} {weatherData.precipitationUnit}</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </template>
+
+    <!-- ── Empty State ────────────────────────────────────────────────────── -->
+    <template if:true={showEmptyState}>
+      <div class="slds-p-around_large slds-text-align_center empty-state">
+        <p class="empty-icon">🌍</p>
+        <p class="slds-text-heading_small slds-m-top_small">Search for a city to see its weather</p>
+        <p class="slds-text-body_small slds-text-color_weak slds-m-top_xx-small">
+          Powered by Open-Meteo — free, no API key required
+        </p>
+      </div>
+    </template>
+
+  </lightning-card>
+</template>

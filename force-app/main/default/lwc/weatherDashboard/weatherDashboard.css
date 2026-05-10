@@ -1,0 +1,75 @@
+/* ── City Header ─────────────────────────────────────────────────────────── */
+
+.city-header {
+    border-bottom: 1px solid var(--lwc-colorBorder, #dddbda);
+    padding-bottom: 1rem;
+}
+
+.weather-icon-main {
+    font-size: 4rem;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+}
+
+.city-name {
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.condition-label {
+    color: var(--lwc-colorTextDefault, #3e3e3c);
+    font-style: italic;
+}
+
+/* ── Metric Cards ─────────────────────────────────────────────────────────── */
+
+.metric-card {
+    background: var(--lwc-colorBackgroundAlt, #f3f3f3);
+    border-radius: 8px;
+    min-height: 110px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: box-shadow 0.15s ease;
+}
+
+.metric-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.metric-icon {
+    font-size: 1.75rem;
+    margin-bottom: 0.25rem;
+    line-height: 1;
+}
+
+.metric-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--lwc-colorTextWeak, #706e6b);
+    margin-bottom: 0.25rem;
+}
+
+.metric-value {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--lwc-colorTextDefault, #3e3e3c);
+}
+
+.temp-value {
+    font-size: 1.6rem;
+    color: var(--lwc-colorBrand, #0176d3);
+}
+
+/* ── Empty State ──────────────────────────────────────────────────────────── */
+
+.empty-state {
+    padding: 3rem 1rem;
+}
+
+.empty-icon {
+    font-size: 3.5rem;
+    line-height: 1;
+}
