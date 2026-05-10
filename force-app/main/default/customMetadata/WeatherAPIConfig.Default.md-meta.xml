@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Default</label>
+    <protected>false</protected>
+    <values>
+        <field>GeocodingEndpoint__c</field>
+        <value xsi:type="xsd:string">https://geocoding-api.open-meteo.com/v1/search</value>
+    </values>
+    <values>
+        <field>ForecastEndpoint__c</field>
+        <value xsi:type="xsd:string">https://api.open-meteo.com/v1/forecast</value>
+    </values>
+    <values>
+        <field>ForecastCurrentParams__c</field>
+        <value xsi:type="xsd:string">temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,precipitation,weather_code</value>
+    </values>
+    <values>
+        <field>Timeout__c</field>
+        <value xsi:type="xsd:double">10000</value>
+    </values>
+</CustomMetadata>

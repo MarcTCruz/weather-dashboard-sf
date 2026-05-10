@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RemoteSiteSetting xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Open-Meteo Geocoding API — allows Apex callouts to geocoding-api.open-meteo.com</description>
+    <disableProtocolSecurity>false</disableProtocolSecurity>
+    <isActive>true</isActive>
+    <url>https://geocoding-api.open-meteo.com</url>
+</RemoteSiteSetting>
