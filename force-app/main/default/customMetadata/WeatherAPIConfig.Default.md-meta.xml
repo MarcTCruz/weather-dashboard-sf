@@ -6,11 +6,11 @@
     <protected>false</protected>
     <values>
         <field>GeocodingEndpoint__c</field>
-        <value xsi:type="xsd:string">https://geocoding-api.open-meteo.com/v1/search</value>
+        <value xsi:type="xsd:string">callout:OpenMeteo_Geocoding/v1/search</value>
     </values>
     <values>
         <field>ForecastEndpoint__c</field>
-        <value xsi:type="xsd:string">https://api.open-meteo.com/v1/forecast</value>
+        <value xsi:type="xsd:string">callout:OpenMeteo_Forecast/v1/forecast</value>
     </values>
     <values>
         <field>ForecastCurrentParams__c</field>
