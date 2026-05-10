@@ -3,8 +3,3 @@
 .sf
 .sfdx
 
-# Named Credentials are scaffolded for future use but not deployed yet.
-# Remove these entries (and update WeatherService to use callout:OpenMeteo_*)
-# when migrating from raw URLs + Remote Site Settings to Named Credentials.
-force-app/main/default/namedCredentials/OpenMeteo_Forecast.namedCredential-meta.xml
-force-app/main/default/namedCredentials/OpenMeteo_Geocoding.namedCredential-meta.xml

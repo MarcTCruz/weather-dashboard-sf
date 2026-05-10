@@ -27,8 +27,8 @@ private class WeatherServiceTest {
 
     private static WeatherAPIConfig__mdt makeConfig() {
         return new WeatherAPIConfig__mdt(
-            GeocodingEndpoint__c     = 'https://geocoding-api.open-meteo.com/v1/search',
-            ForecastEndpoint__c      = 'https://api.open-meteo.com/v1/forecast',
+            GeocodingEndpoint__c     = 'callout:OpenMeteo_Geocoding/v1/search',
+            ForecastEndpoint__c      = 'callout:OpenMeteo_Forecast/v1/forecast',
             ForecastCurrentParams__c = 'temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,precipitation,weather_code',
             Timeout__c               = 10000
         );

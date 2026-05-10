@@ -87,6 +87,7 @@ O deploy inclui automaticamente:
 - Custom Tab `Painel_Climatico` (apontando diretamente para o LWC via `<lwcComponent>`)
 - Lightning App `Painel Climático` (disponível no App Launcher)
 - Permission Set `WeatherDashboardUser` (visibilidade da aba + acesso ao Apex)
+- Named Credentials `OpenMeteo_Forecast` e `OpenMeteo_Geocoding` (NoAuthentication)
 
 ### 3. Atribuir o Permission Set ao usuário
 
@@ -126,9 +127,10 @@ Cobertura esperada: **≥ 85%** em `WeatherService.cls`.
 
 | Propriedade | Valor |
 |---|---|
-| URL base | `https://geocoding-api.open-meteo.com/v1/search` |
+| URL base | `callout:OpenMeteo_Geocoding/v1/search` (resolvido via Named Credential para `https://geocoding-api.open-meteo.com/v1/search`) |
 | Método | GET |
-| Remote Site | `OpenMeteoGeocoding` |
+| Named Credential | `OpenMeteo_Geocoding` (NoAuthentication / Anonymous) |
+| Remote Site | `OpenMeteoGeocoding` (mantido como fallback) |
 
 **Parâmetros enviados:**
 
@@ -149,9 +151,10 @@ Cobertura esperada: **≥ 85%** em `WeatherService.cls`.
 
 | Propriedade | Valor |
 |---|---|
-| URL base | `https://api.open-meteo.com/v1/forecast` |
+| URL base | `callout:OpenMeteo_Forecast/v1/forecast` (resolvido via Named Credential para `https://api.open-meteo.com/v1/forecast`) |
 | Método | GET |
-| Remote Site | `OpenMeteoForecast` |
+| Named Credential | `OpenMeteo_Forecast` (NoAuthentication / Anonymous) |
+| Remote Site | `OpenMeteoForecast` (mantido como fallback) |
 
 **Parâmetros enviados:**
 
@@ -204,9 +207,17 @@ O campo `weather_code` da API segue o padrão **WMO 4677**. `WeatherService` map
 
 Como cada busca realiza **duas** chamadas HTTP sequenciais (geocoding → forecast), o `WeatherServiceTest` implementa `MultiMock` — uma fila de `HttpResponse` consumida em ordem. Isso evita mock único que não distingue qual chamada está sendo testada.
 
-### Remote Site Settings incluídos no deploy
+### Named Credentials para chamadas externas
 
-Os dois domínios Open-Meteo (`api.open-meteo.com` e `geocoding-api.open-meteo.com`) são declarados como Remote Site Settings no fonte, garantindo que a org destino os tenha habilitados automaticamente após o deploy.
+Os endpoints Open-Meteo são acessados via **Named Credentials** (`OpenMeteo_Forecast` e `OpenMeteo_Geocoding`), com protocolo `NoAuthentication` (a API é pública). O Custom Metadata armazena o endpoint no formato `callout:<NamedCredential>/<path>`, e o Salesforce roteia a requisição automaticamente. Vantagens sobre URL direta + Remote Site Setting:
+
+- Endpoint físico fica em **um único lugar** (a Named Credential), não disperso em múltiplas configurações.
+- Suporte nativo a futura troca de protocolo (BasicAuth, OAuth) sem alterar código Apex.
+- Permite atribuição via Permission Set, alinhando ao padrão moderno do Salesforce.
+
+### Remote Site Settings mantidos como fallback
+
+Os dois Remote Site Settings (`OpenMeteoForecast`, `OpenMeteoGeocoding`) permanecem no projeto como fallback caso o Custom Metadata seja revertido para URLs diretas em algum cenário de troubleshooting.
 
 ---
 
