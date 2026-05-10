@@ -16,6 +16,8 @@ O **Painel Climático** permite que usuários do Salesforce pesquisem qualquer c
 | Vento | Velocidade do vento a 10 m (km/h) |
 | Precipitação | Precipitação atual em mm |
 
+A interface é totalmente em **português brasileiro (pt-BR)**, incluindo rótulos, mensagens de erro e descrições de condições meteorológicas (mapeamento WMO 4677).
+
 Cada consulta realiza duas chamadas HTTP sequenciais:
 
 1. **Geocoding API** — converte o nome da cidade em coordenadas (latitude/longitude), país e fuso horário.
@@ -82,15 +84,29 @@ O deploy inclui automaticamente:
 - Remote Site Settings para ambos os domínios Open-Meteo
 - Classes Apex: `WeatherDTO`, `WeatherService`, `WeatherServiceTest`
 - LWC: `weatherDashboard`
+- Custom Tab `Painel_Climatico` (apontando diretamente para o LWC via `<lwcComponent>`)
+- Lightning App `Painel Climático` (disponível no App Launcher)
+- Permission Set `WeatherDashboardUser` (visibilidade da aba + acesso ao Apex)
 
-### 3. Adicionar o componente a uma página
+### 3. Atribuir o Permission Set ao usuário
 
-1. Abra o **Lightning App Builder** (`Setup → Lightning App Builder`).
-2. Edite ou crie uma **App Page**, **Home Page** ou **Record Page**.
-3. Localize **"Weather Dashboard"** no painel de componentes.
-4. Arraste para o layout e clique em **Save → Activate**.
+```bash
+sf org assign permset \
+  --name WeatherDashboardUser \
+  --target-org minha-org
+```
 
-### 4. Executar os testes isoladamente (opcional)
+### 4. Acessar o Painel Climático
+
+Há **três formas** de visualizar o componente após o deploy:
+
+| Forma | Como |
+|---|---|
+| **App Launcher** | Clique no App Launcher → busque "Painel Climático" → clique no app. |
+| **URL direta** | Navegue para `/lightning/cmp/c__weatherDashboard` (target `lightning__UrlAddressable`). |
+| **App Builder** | Abra o **Lightning App Builder**, arraste o componente "Painel Climático" para qualquer App/Home/Record Page. |
+
+### 5. Executar os testes isoladamente (opcional)
 
 ```bash
 sf apex run test \
@@ -240,22 +256,28 @@ Os dois domínios Open-Meteo (`api.open-meteo.com` e `geocoding-api.open-meteo.c
 ```
 WeatherChallenge/
 ├── force-app/main/default/
+│   ├── applications/
+│   │   └── Painel_Climatico.app-meta.xml          # Lightning App (App Launcher)
 │   ├── classes/
-│   │   ├── WeatherDTO.cls              # DTOs: GeocodingResponse, ForecastResponse, WeatherResult
-│   │   ├── WeatherService.cls          # Lógica: geocodeCity, getWeatherByCity, mapeamento WMO
-│   │   └── WeatherServiceTest.cls      # Testes unitários (≥85% cobertura)
+│   │   ├── WeatherDTO.cls                         # DTOs: GeocodingResponse, ForecastResponse, WeatherResult
+│   │   ├── WeatherService.cls                     # Lógica: geocodeCity, getWeatherByCity, mapeamento WMO (pt-BR)
+│   │   └── WeatherServiceTest.cls                 # Testes unitários (≥85% cobertura)
 │   ├── customMetadata/
 │   │   └── WeatherAPIConfig.Default.md-meta.xml   # Registro CMT com URLs e params padrão
 │   ├── lwc/
 │   │   └── weatherDashboard/
-│   │       ├── weatherDashboard.html   # Template: search, loading, error, result, empty state
-│   │       ├── weatherDashboard.js     # Controller: estados, handlers, getter formattedTime
-│   │       ├── weatherDashboard.css    # Estilos: metric-card hover, temp-value brand color
-│   │       └── weatherDashboard.js-meta.xml
-│   ├── objects/WeatherAPIConfig__mdt/  # CMT schema: 4 campos (endpoints, params, timeout)
-│   └── remoteSiteSettings/
-│       ├── OpenMeteoForecast.remoteSite-meta.xml
-│       └── OpenMeteoGeocoding.remoteSite-meta.xml
+│   │       ├── weatherDashboard.html              # Template em pt-BR: busca, loading, erro, resultado, estado vazio
+│   │       ├── weatherDashboard.js                # Controller: estados, handlers, getter formattedTime
+│   │       ├── weatherDashboard.css               # Estilos: metric-card hover, temp-value brand color
+│   │       └── weatherDashboard.js-meta.xml       # Targets: AppPage, HomePage, RecordPage, Tab, UrlAddressable
+│   ├── objects/WeatherAPIConfig__mdt/             # CMT schema: 4 campos (endpoints, params, timeout)
+│   ├── permissionsets/
+│   │   └── WeatherDashboardUser.permissionset-meta.xml  # Acesso ao Apex + visibilidade da aba
+│   ├── remoteSiteSettings/
+│   │   ├── OpenMeteoForecast.remoteSite-meta.xml
+│   │   └── OpenMeteoGeocoding.remoteSite-meta.xml
+│   └── tabs/
+│       └── Painel_Climatico.tab-meta.xml          # Custom Tab apontando para o LWC weatherDashboard
 └── sfdx-project.json
 ```
 
